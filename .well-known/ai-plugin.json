@@ -1,9 +1,9 @@
 {
     "schema_version": "v1",
-    "name_for_human": "TODO Plugin (no auth)",
-    "name_for_model": "todo",
-    "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-    "description_for_model": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
+    "name_for_human": "HANK.ai Medical Coding Plugin",
+    "name_for_model": "autocoder",
+    "description_for_human": "Plugin for submitting medical documentation and receiving back cpt, icd, and modifier coding as line items.",
+    "description_for_model": "Plugin for submitting medical documentation and returning the appropriate medical codes (cpt, asa, icd, modifiers, providers) for the encounter.",
     "auth": {
       "type": "none"
     },
@@ -12,8 +12,8 @@
       "url": "http://localhost:5003/openapi.yaml",
       "is_user_authenticated": false
     },
-    "logo_url": "http://localhost:5003/logo.png",
-    "contact_email": "legal@example.com",
-    "legal_info_url": "http://example.com/legal"
+    "logo_url": "http://localhost:5003/hank_logo.png",
+    "contact_email": "chatgpt@hank.ai",
+    "legal_info_url": "https://hank.ai/legal"
   }
   

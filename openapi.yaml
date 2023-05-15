@@ -1,93 +1,70 @@
 openapi: 3.0.1
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
+  title: HANK.ai AutoCoding Plugin
+  description: A plugin that allows the user to submit medical documentation and returns the appropriate medical codes (cpt, asa, icd, modifiers, providers) for the case.. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
   version: 'v1'
 servers:
   - url: http://localhost:5003
 paths:
-  /todos/{username}:
-    get:
-      operationId: getTodos
-      summary: Get the list of todos
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getTodosResponse'
-    post:
-      operationId: addTodo
-      summary: Add a todo to the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/addTodoRequest'
-      responses:
-        "200":
-          description: OK
-    delete:
-      operationId: deleteTodo
-      summary: Delete a todo from the list
-      parameters:
-      - in: path
-        name: username
-        schema:
-            type: string
-        required: true
-        description: The name of the user.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
-      responses:
-        "200":
-          description: OK
 
+
+  /autocode/{username}:
+    post:
+      operationId: autocode
+      summary: Autocode a medical document
+      parameters:
+      - in: path
+        name: username
+        schema:
+            type: string
+        required: true
+        description: The username of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/autocodeRequest'
+      responses:
+        "200":
+          description: OK
 components:
   schemas:
-    getTodosResponse:
-      type: object
-      properties:
-        todos:
-          type: array
-          items:
-            type: string
-          description: The list of todos.
-    addTodoRequest:
+    autocodeRequest:
       type: object
       required:
-      - todo
+      - autocodetext
       properties:
-        todo:
+        autocodetext:
           type: string
-          description: The todo to add to the list.
+          description: A summary of the medical document text to autocode.
           required: true
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo_idx
-      properties:
-        todo_idx:
-          type: integer
-          description: The index of the todo to delete.
-          required: true
+        dos:
+          type: datetime
+          description: The date of service for the encounter to be autocoded 
+          required: false
+        dob: 
+          type: string
+          description: The date of birth of the patient
+          required: false
+        diagnosis: 
+          type: string
+          description: The main diagnosis, as a short textual description, for the current encounter
+          required: false
+        surgery: 
+          type: string
+          description: The primary surgical procedure performed, as a short textual description, for the current encounter
+          required: false
+
+        zipcode:
+          type: string
+          description: The zip code where the medical encounter occurred
+          required: false
+        patient_age: 
+          type: string
+          description: The age of the patient
+          required: false
+        specialty:
+          type: string
+          description: The medical specialty providing care to the patient, which determines how the autocoder will code the encounter.
+          enum: [anesthesia, surgical, radiology, emergencymedicine, eandm]

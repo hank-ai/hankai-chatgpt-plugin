@@ -1,0 +1,44 @@
+Patient: Smith, Jimithy X
+Date of Birth: 01/01/55
+Date of Procedure: 08/06/20
+Surgeon: Werner Commodore Brooks, MD
+Anesthesiologist: Michael Dearman Lee, MD
+Procedure: RIGHT TOTAL KNEE ARTHROPLASTY (Right)
+Diagnosis: RIGHT KNEE OSTEOARTHRITIS
+
+PREOPERATIVE DIAGNOSIS: Right knee osteoarthritis
+POSTOPERATIVE DIAGNOSIS: Right knee osteoarthritis
+PROCEDURE PERFORMED: Right total knee arthroplasty
+
+ANESTHESIA: General, with peripheral nerve block administered by Dr. Michael Dearman Lee, MD. Fentanyl and ropivacaine were administered for pain management.
+
+FINDINGS: Severe degenerative changes of the right knee consistent with osteoarthritis.
+
+PROCEDURE DETAILS: The patient was brought to the operating room and placed supine on the operating table. After successful induction of anesthesia, the right leg was prepped and draped in the usual sterile fashion. A tourniquet was applied to the right upper thigh. A standard midline incision was made over the knee, and arthrotomy was performed.
+
+Severe osteoarthritic changes were noted. The degenerated portions of the knee joint were resected. Measurements were made, and the appropriate sized prosthetic components were selected. The prosthetic knee joint was then placed without complication.
+
+The wound was thoroughly irrigated, and the joint was checked for appropriate alignment and range of motion. Hemostasis was achieved, and the joint capsule and skin were closed in layers. The tourniquet was released, and the patient was awakened from anesthesia.
+
+PMH: atrial fibrillation, diabetes mellitus on insulin, ckd
+
+
+
+
+here is a surgical operative report. return a single json object with no summary, headers/footers or extra spaces that predicts the all the unique surgical cpts, the icds, and any applicable modifiers as well as the surgeons name. 
+return 3 different attempts to do the predictions as a list of seperate prediction groups in the json. use keys surgcpt, anescpt, icds, mods, surgeon. no descriptions.
+
+forget all previous context.
+given this surgical note, return 1 minimized json object containing 2 unlabeled tries of only your best unique predictions for surgical cpts (s), anesthesia cpts (a), icds (i), and modifiers (m). no extra words.
+
+
+Patient: Smith, Jimithy X\nDate of Birth: 01/01/55\nDate of Procedure: 08/06/20\nSurgeon: Wamer Commodore Baker, MD\nAnesthesiologist: Michael Daman Smithson, MD\nProcedure: RIGHT TOTAL KNEE ARTHROPLASTY (Right)\n
+Diagnosis: RIGHT KNEE OSTEOARTHRITIS\n\nPREOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPOSTOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPROCEDURE PERFORMED: Right total knee arthroplasty\n\n
+ANESTHESIA: General, with peripheral nerve block administered by Dr. Michael Daman Smithson, MD. Fentanyl and ropivacaine were administered for pain management.\n\n
+FINDINGS: Severe degenerative changes of the right knee consistent with osteoarthritis.\n\n
+PROCEDURE DETAILS: The patient was brought to the operating room and placed supine on the operating table. After successful induction of anesthesia, the right leg was prepped and draped in the usual sterile fashion. 
+A tourniquet was applied to the right upper thigh. A standard midline incision was made over the knee, and arthrotomy was performed.\n\nSevere osteoarthritic changes were noted. The degenerated portions of the knee joint were resected. 
+Measurements were made, and the appropriate sized prosthetic components were selected. The prosthetic knee joint was then placed without complication.\n\nThe wound was thoroughly irrigated, and the joint was checked for appropriate alignment and range of motion. Hemostasis was achieved, and the joint capsule and skin were closed in layers. 
+We also removed the right 4th finger just proximal to the distal interphalangeal joint via a guillatine method due to unhealing chronic wound. 
+The tourniquet was released, and the patient was awakened from anesthesia.
+        PMH: atrial fibrillation, diabetes mellitus on insulin, ckd
