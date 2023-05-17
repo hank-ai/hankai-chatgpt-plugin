@@ -102,13 +102,15 @@ def query_openai(specialty, this_prompt):
 
 #checks a row in a dataframe to see if the anescpt (a) in that row is in the crosswalk for the given surgcpt (s).
 #returns anescpt value if it is in the crosswalk for that surgcpt. if not, will return the first anesthesia cpt code listed in the crosswalk
-def checkASACW(row, year=2023):
+def checkASACW(row, year=2023, dropUncrosswalked=True):
     cwasas = getCrosswalkedASAs(row['s'], alternates=True, year=year, quiet=1)
-    if len(cwasas)>0 and row['a'] not in cwasas:
-        print(f"swapping {row['a']} for {cwasas[0]} from crosswalk")
-        return cwasas[0]
-    else:
-        return row['a']
+    if len(cwasas)>0:
+        if row['a'] not in cwasas:
+            print(f"swapping {row['a']} for {cwasas[0]} from crosswalk")
+            return cwasas[0]
+    elif dropUncrosswalked:
+        return ""
+    return row['a']
 
 @app.post("/autocode/<string:username>")
 async def autocode(username):
@@ -148,13 +150,13 @@ def groupAnes(df):
 
 def handleCands(cands:dict, year:int=2023, specialty='anesthesia'):
     res = []
-    #df = pd.DataFrame(cands)
+    df = pd.DataFrame(cands)
     # Add prediction_id based on index
-    for i, d in enumerate(cands):
-        d['prediction_id'] = i+1
-    df = pd.json_normalize(cands, 's', ['a', 'i', 'm', 'prediction_id'], record_prefix='s_')
+    # for i, d in enumerate(cands):
+    #     d['prediction_id'] = i+1
+    # df = pd.json_normalize(cands, 's', ['a', 'i', 'm', 'prediction_id'], record_prefix='s_')
 
-    print(df)
+    
     if specialty=='anesthesia': df['a'] = df.apply(lambda row: checkASACW(row, year=year), axis=1) 
     res = df.to_json(orient="records", indent=2)
     return res
