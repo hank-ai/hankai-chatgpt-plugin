@@ -24,6 +24,8 @@ PMH: atrial fibrillation, diabetes mellitus on insulin, ckd
 
 
 
+forget all previous context. given the following procedure note, 
+predict lists of the best procedure cpts (s), icd codes (i), and the billing modifiers (m) as json. only return the json object. use json keys s, a, i, m.
 
 here is a surgical operative report. return a single json object with no summary, headers/footers or extra spaces that predicts the all the unique surgical cpts, the icds, and any applicable modifiers as well as the surgeons name. 
 return 3 different attempts to do the predictions as a list of seperate prediction groups in the json. use keys surgcpt, anescpt, icds, mods, surgeon. no descriptions.
@@ -32,7 +34,31 @@ forget all previous context.
 given this surgical note, return 1 minimized json object containing 2 unlabeled tries of only your best unique predictions for surgical cpts (s), anesthesia cpts (a), icds (i), and modifiers (m). no extra words.
 
 
-Patient: Smith, Jimithy X\nDate of Birth: 01/01/55\nDate of Procedure: 08/06/20\nSurgeon: Wamer Commodore Baker, MD\nAnesthesiologist: Michael Daman Smithson, MD\nProcedure: RIGHT TOTAL KNEE ARTHROPLASTY (Right)\n
+#tka surgery
+Patient: Smith, Jimithy X\nDate of Birth: 01/01/55\nDate of Procedure: 08/06/20\nSurgeon: Wamer Commodore Baker, MD\nAnesthesiologist: Michael Daman Smithson, MD\n
+
+Procedure: RIGHT TOTAL KNEE ARTHROPLASTY (Right)\n
+Diagnosis: RIGHT KNEE OSTEOARTHRITIS\n\nPREOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPOSTOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPROCEDURE PERFORMED: Right total knee arthroplasty\n\n
+ANESTHESIA: General, with peripheral nerve block administered by Dr. Michael Daman Smithson, MD. Fentanyl and ropivacaine were administered for pain management.\n\n
+FINDINGS: Severe degenerative changes of the right knee consistent with osteoarthritis.\n\n
+PROCEDURE DETAILS: The patient was brought to the operating room and placed supine on the operating table. After successful induction of anesthesia, the right leg was prepped and draped in the usual sterile fashion. 
+A tourniquet was applied to the right upper thigh. A standard midline incision was made over the knee, and arthrotomy was performed.\n\nSevere osteoarthritic changes were noted. The degenerated portions of the knee joint were resected. 
+Measurements were made, and the appropriate sized prosthetic components were selected. The prosthetic knee joint was then placed without complication.\n\nThe wound was thoroughly irrigated, and the joint was checked for appropriate alignment and range of motion. Hemostasis was achieved, and the joint capsule and skin were closed in layers. 
+We also removed the right 4th finger just proximal to the distal interphalangeal joint via a guillatine method due to unhealing chronic wound. 
+The tourniquet was released, and the patient was awakened from anesthesia.
+        PMH: atrial fibrillation, diabetes mellitus on insulin, ckd
+
+
+#nerve blocks
+Preoperative Diagnosis: Pain in the left leg Procedure: Adductor canal and popliteal sciatic nerve block using ultrasound guidance Anesthesia: Ropivacaine, 20 ml per nerve block location Technique: The patient was placed in the supine position and the 
+left leg was prepped and draped in a sterile manner. Using ultrasound guidance, a 22 gauge needle was introduced into the adductor canal and advanced until visualization of the saphenous nerve. Ropivacaine, 20 ml, was then injected around the nerve. An image of the needle in place was captured and stored for review. Next, the needle was introduced into the popliteal fossa and advanced until visualization of the sciatic nerve. Ropivacaine, 20 ml, was then injected around the nerve. An image of the needle in place was captured and stored for review. The patient tolerated the procedure well and no complications were encountered. Post-procedure Diagnosis: Left leg pain, nerve block in place
+
+
+forget all previous context.
+given this operative report, return 3 independent attempts to provide medical codes in a minimized json object 
+of your best predictions for surgical cpts as s, anesthesia cpts as a, icds as i, and modifiers as m. 
+no extra words.
+Procedure: RIGHT TOTAL KNEE ARTHROPLASTY (Right)\n
 Diagnosis: RIGHT KNEE OSTEOARTHRITIS\n\nPREOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPOSTOPERATIVE DIAGNOSIS: Right knee osteoarthritis\nPROCEDURE PERFORMED: Right total knee arthroplasty\n\n
 ANESTHESIA: General, with peripheral nerve block administered by Dr. Michael Daman Smithson, MD. Fentanyl and ropivacaine were administered for pain management.\n\n
 FINDINGS: Severe degenerative changes of the right knee consistent with osteoarthritis.\n\n

@@ -1,0 +1,313 @@
+Modifier,Year,Description
+21,2022,Prolonged E & M Services
+22,2022,Unusual Procedural Services
+23,2022,Unusual Anesthesia
+24,2022,"Unrelated E&M Service, Same Physician, During Postoperative Period"
+25,2022,"Significant, Separately Identifiable E&M Service by the Same Physician on the Same Day of the Procedure or Other Service"
+26,2022,Professional Component
+27,2022,Multiple Outpatient Hospital E/M Encounters on the Same Date
+32,2022,Mandated Services
+33,2022,Preventive Services
+47,2022,Anesthesia by Surgeon
+50,2022,Bilateral Procedure
+51,2022,Multiple Procedures
+52,2022,Reduced Services
+53,2022,Discontinued Procedure
+54,2022,Surgical Care Only
+55,2022,Postoperative Management Only
+56,2022,Preoperative Management Only
+57,2022,Decision for Surgery
+58,2022,Staged or Related Procedure or Service by the Same Physician During the Postoperative Period
+59,2022,Distinct Procedural Service
+62,2022,Two Surgeons
+63,2022,Procedure Performed on Infants less than 4 kg
+66,2022,Surgical Team
+73,2022,Discontinued Outpatient Hospital/ASC Procedure Prior to the Administration of Anesthesia
+74,2022,Discontinued Outpatient Hospital/ASC Procedure After Administration of Anesthesia
+76,2022,Repeat Procedure by Same Physician
+77,2022,Repeat Procedure by Another Physician
+78,2022,Return to the Operating Room for a Related Procedure During the Postoperative Period
+79,2022,Unrelated Procedure or Service by the Same Physician During the Postoperative Period
+80,2022,Assistant Surgeon
+81,2022,Minimum Assistant Surgeon
+82,2022,Assistant Surgeon (when qualified resident surgeon is not available in a teaching facility)
+90,2022,Reference (Outside) Laboratory
+91,2022,Repeat Clinical Diagnostic Laboratory Test
+92,2022,Alternative Laboratory Platform Testing
+95,2022,Synchronous Telemedicine Service Rendered Via a Real-Time Interactive Audio and Video Telecommunications System
+96,2022,Habilitative Services
+97,2022,Rehabilitative Services
+99,2022,Multiple Modifiers
+AA,2022,Anesthesia services performed by anesthesiologist
+AD,2022,"Medical supervision by a physician, more than four concurrent anesthesia procedures"
+AH,2022,Clinical Psychologist (CP) Services
+AJ,2022,Clinical Social Worker (CSW)
+AM,2022,"Physician, team member service"
+AS,2022,"Physician Assistant, Nurse Practitioner, or Clinical Nurse Specialist services for assistant at surgery"
+AT,2022,Acute treatment
+CC,2022,Procedure code changed
+E1,2022,"Upper Left, Eyelid"
+E2,2022,"Lower Left, Eyelid"
+E3,2022,"Upper Right, Eyelid"
+E4,2022,"Lower Right, Eyelid"
+EJ,2022,Subsequent claims for a defined course of therapy
+EM,2022,Emergency reserve supply (for ESRD benefit only)
+EP,2022,Service provided as part of Medicaid early periodic screening diagnosis and treatment (EPSDT) program
+F1,2022,"Left Hand, Second Digit"
+F2,2022,"Left Hand, Third Digit"
+F3,2022,"Left Hand, Fourth Digit"
+F4,2022,"Left Hand, Fifth Digit"
+F5,2022,"Right Hand, Thumb"
+F6,2022,"Right Hand, Second Digit"
+F7,2022,"Right Hand, Third Digit"
+F8,2022,"Right Hand, Fourth Digit"
+F9,2022,"Right Hand, Fifth Digit"
+FA,2022,"Left Hand, Thumb"
+FP,2022,Service Provided as Part of Medicaid Family Planning Program
+G1,2022,Most recent urea reduction ratio (URR) reading of less Than 60
+G2,2022,Most recent urea reduction ratio (URR) reading of 60 to 64.9
+G3,2022,Most recent urea reduction ratio (URR) of 65 to 69.9
+G4,2022,Most recent urea reduction ratio (URR) of 70 to 74.9
+G5,2022,Most recent urea reduction ratio (URR) reading of 75 or greater
+G6,2022,ESRD patient for whom less than six dialysis sessions have been provided in a month
+G7,2022,Pregnancy resulted from rape or incest or pregnancy certified by physician as life threatening
+G8,2022,"Monitored Anesthesia Care (MAC) for deep complex, complicated, or markedly invasive surgical procedure"
+G9,2022,Monitored Anesthesia Care (MAC) for patient who has history of severe cardio- pulmonary condition
+GA,2022,"Waiver of Liability Statement on file. (Effective for dates of service on or after October 1, 1995, a physician or supplier should use this modifier to note that the patient has been advised of the possibility of non- coverage.) "
+GB,2022,Claim being re-submitted for payment because it is no longer covered under a global payment demonstration
+GC,2022,This service has been performed in part by a resident under the direction of a teaching physician
+GE,2022,This service has been performed by a resident without the presence of a teaching physician under the primary care exception
+GG,2022,"Performance and payment of a screening mammogram and diagnostic mammogram on the same patient, same day"
+GH,2022,Diagnostic mammogram converted from screening mammogram on same day
+GJ,2022,'Opt Out' physician or practitioner emergency or urgent service
+GM,2022,Multiple patients on one ambulance trip
+GN,2022,Service delivered personally by a speech-language pathologist or under an outpatient speech-language pathology plan of care
+GO,2022,Service delivered personally by an occupational therapist or under an outpatient occupational therapy plan of care
+GP,2022,Service delivered personally by a physical therapist or under an outpatient physical therapy plan of care
+GQ,2022,Via asynchronous telecommunications system 
+GT,2022,Via interactive audio and video telecommunication systems
+GV,2022,Attending physician not employed or paid under arrangement by the patient's hospice provider
+GW,2022,Service not related to the hospice patient's terminal condition
+GY,2022,Item or service statutorily excluded or does not meet the definition of any Medicare benefit
+GZ,2022,Item or service expected to be denied as not reasonable and necessary
+KO,2022,Single drug unit dose formulation. KP - First drug of a multiple drug unit dose formulation
+KP,2022,First drug of a multiple drug unit dose formulation
+KQ,2022,Second or subsequent drug of a multiple drug unit dose formulation
+LC,2022,Left circumflex coronary artery
+LD,2022,Left anterior descending coronary artery
+LR,2022,Laboratory round trip
+LS,2022,FDA-monitored intraocular lens implant
+LT,2022,Left Side. (Used to identify procedures performed on the left side of the body.) 
+P1,2022,A normal healthy patient
+P2,2022,Mild systemic disease
+P3,2022,Severe systemic disease
+P4,2022,Severe systemic disease with constant threat to life
+P5,2022,A moribund patient who is not expected to survive without the operation
+P6,2022,A declared brain dead patient whose organs are being removed for donor purposes
+PT,2022,Colorectal screen service converted to diagnostic or therapeutic service
+Q3,2022,Live kidney donor - Services associated with postoperative medical complications directly related to the donation
+Q4,2022,Service for ordering/referring physician qualifies as a service exemption
+Q5,2022,Service furnished by a substitute physician under a reciprocal billing arrangement
+Q6,2022,Service furnished by a locum tenens physician
+Q7,2022,One Class A Finding
+Q8,2022,Two Class B findings
+Q9,2022,One Class B and Two Class C findings
+QA,2022,FDA investigational device exemption
+QB,2022,Physician providing service in a rural Health Professional Shortage Area (HPSA)
+QC,2022,Single channel monitoring
+QD,2022,Recording and storage in solid state memory by digital recorder
+QK,2022,"Medical direction of two, three, or four concurrent anesthesia procedures involving qualified individuals"
+QL,2022,Patient pronounced dead after ambulance called
+QM,2022,Ambulance service provided under arrangement by a provider of services
+QN,2022,Ambulance service furnished directly by a provider of services
+QP,2022,"Documentation is on file showing that the laboratory test(s) was ordered individually or ordered as a CPT-recognized panel other than automated profile codes 80002-80019, G0058, G0059, and G0060"
+QQ,2022,Claim submitted with a written statement of intent
+QS,2022,Monitored anesthesia care service
+QT,2022,Recording and storage on a tape by an analog tape recorder
+QU,2022,Physician providing service in an urban Health Professional Shortage Area (HPSA)
+QV,2022,Item or service provided as routine care in a Medicare qualifying clinical trial
+QW,2022,Clinical Laboratory Improvement Amendment (CLIA) waived test (modifier used to identify waived tests)
+QX,2022,CRNA service with medical direction by a physician
+QY,2022,Anesthesiologist medically directs one CRNA
+QZ,2022,CRNA service without medical direction by a physician
+RC,2022,Right coronary artery
+RT,2022,Right Side (used to identify procedures performed on the right side of the body)
+SF,2022,"Second opinion ordered by a Professional Review Organization (PRO) per Section 9401, P.L. 99-272 (100% reimbursement - no Medicare deductible or coinsurance)"
+SG,2022,Ambulatory Surgical Center (ASC) facility service
+T1,2022,"Left Foot, Second Digit"
+T2,2022,"Left Foot, Third Digit"
+T3,2022,"Left Foot, Fourth Digit"
+T4,2022,"Left Foot, Fifth Digit"
+T5,2022,"Right Foot, Great Toe"
+T6,2022,"Right Foot, Second Digit"
+T7,2022,"Right Foot, Third Digit"
+T8,2022,"Right Foot, Fourth Digit"
+T9,2022,"Right Foot, Fifth Digit"
+TA,2022,"Left Foot, Great Toe"
+TC,2022,Technical Component
+UN,2022,Two patients served
+UP,2022,Three patients served
+UQ,2022,Four patients served
+UR,2022,Five patients served
+US,2022,Six patients or more served
+VP,2022,Aphakic Patient
+XE,2022,"Separate encounter, A service that is distinct because it occurred during a separate encounter. This modifier should only be used to describe separate encounters on the same date of service."
+XS,2022,"Separate Structure, A service that is distinct because it was performed on a separate organ/strucutre."
+XP,2022,"Separate Practitioner, A service that is distinct because it was performed by a different practitioner."
+XU,2022,"Unusual Non-Overlapping Service, The use of a service that is distinct because it does not overlap usual components of the main service."
+21,2023,Prolonged E & M Services
+22,2023,Unusual Procedural Services
+23,2023,Unusual Anesthesia
+24,2023,"Unrelated E&M Service, Same Physician, During Postoperative Period"
+25,2023,"Significant, Separately Identifiable E&M Service by the Same Physician on the Same Day of the Procedure or Other Service"
+26,2023,Professional Component
+27,2023,Multiple Outpatient Hospital E/M Encounters on the Same Date
+32,2023,Mandated Services
+33,2023,Preventive Services
+47,2023,Anesthesia by Surgeon
+50,2023,Bilateral Procedure
+51,2023,Multiple Procedures
+52,2023,Reduced Services
+53,2023,Discontinued Procedure
+54,2023,Surgical Care Only
+55,2023,Postoperative Management Only
+56,2023,Preoperative Management Only
+57,2023,Decision for Surgery
+58,2023,Staged or Related Procedure or Service by the Same Physician During the Postoperative Period
+59,2023,Distinct Procedural Service
+62,2023,Two Surgeons
+63,2023,Procedure Performed on Infants less than 4 kg
+66,2023,Surgical Team
+73,2023,Discontinued Outpatient Hospital/ASC Procedure Prior to the Administration of Anesthesia
+74,2023,Discontinued Outpatient Hospital/ASC Procedure After Administration of Anesthesia
+76,2023,Repeat Procedure by Same Physician
+77,2023,Repeat Procedure by Another Physician
+78,2023,Return to the Operating Room for a Related Procedure During the Postoperative Period
+79,2023,Unrelated Procedure or Service by the Same Physician During the Postoperative Period
+80,2023,Assistant Surgeon
+81,2023,Minimum Assistant Surgeon
+82,2023,Assistant Surgeon (when qualified resident surgeon is not available in a teaching facility)
+90,2023,Reference (Outside) Laboratory
+91,2023,Repeat Clinical Diagnostic Laboratory Test
+92,2023,Alternative Laboratory Platform Testing
+95,2023,Synchronous Telemedicine Service Rendered Via a Real-Time Interactive Audio and Video Telecommunications System
+96,2023,Habilitative Services
+97,2023,Rehabilitative Services
+99,2023,Multiple Modifiers
+AA,2023,Anesthesia services performed by anesthesiologist
+AD,2023,"Medical supervision by a physician, more than four concurrent anesthesia procedures"
+AH,2023,Clinical Psychologist (CP) Services
+AJ,2023,Clinical Social Worker (CSW)
+AM,2023,"Physician, team member service"
+AS,2023,"Physician Assistant, Nurse Practitioner, or Clinical Nurse Specialist services for assistant at surgery"
+AT,2023,Acute treatment
+CC,2023,Procedure code changed
+E1,2023,"Upper Left, Eyelid"
+E2,2023,"Lower Left, Eyelid"
+E3,2023,"Upper Right, Eyelid"
+E4,2023,"Lower Right, Eyelid"
+EJ,2023,Subsequent claims for a defined course of therapy
+EM,2023,Emergency reserve supply (for ESRD benefit only)
+EP,2023,Service provided as part of Medicaid early periodic screening diagnosis and treatment (EPSDT) program
+F1,2023,"Left Hand, Second Digit"
+F2,2023,"Left Hand, Third Digit"
+F3,2023,"Left Hand, Fourth Digit"
+F4,2023,"Left Hand, Fifth Digit"
+F5,2023,"Right Hand, Thumb"
+F6,2023,"Right Hand, Second Digit"
+F7,2023,"Right Hand, Third Digit"
+F8,2023,"Right Hand, Fourth Digit"
+F9,2023,"Right Hand, Fifth Digit"
+FA,2023,"Left Hand, Thumb"
+FP,2023,Service Provided as Part of Medicaid Family Planning Program
+G1,2023,Most recent urea reduction ratio (URR) reading of less Than 60
+G2,2023,Most recent urea reduction ratio (URR) reading of 60 to 64.9
+G3,2023,Most recent urea reduction ratio (URR) of 65 to 69.9
+G4,2023,Most recent urea reduction ratio (URR) of 70 to 74.9
+G5,2023,Most recent urea reduction ratio (URR) reading of 75 or greater
+G6,2023,ESRD patient for whom less than six dialysis sessions have been provided in a month
+G7,2023,Pregnancy resulted from rape or incest or pregnancy certified by physician as life threatening
+G8,2023,"Monitored Anesthesia Care (MAC) for deep complex, complicated, or markedly invasive surgical procedure"
+G9,2023,Monitored Anesthesia Care (MAC) for patient who has history of severe cardio- pulmonary condition
+GA,2023,"Waiver of Liability Statement on file. (Effective for dates of service on or after October 1, 1995, a physician or supplier should use this modifier to note that the patient has been advised of the possibility of non- coverage.) "
+GB,2023,Claim being re-submitted for payment because it is no longer covered under a global payment demonstration
+GC,2023,This service has been performed in part by a resident under the direction of a teaching physician
+GE,2023,This service has been performed by a resident without the presence of a teaching physician under the primary care exception
+GG,2023,"Performance and payment of a screening mammogram and diagnostic mammogram on the same patient, same day"
+GH,2023,Diagnostic mammogram converted from screening mammogram on same day
+GJ,2023,'Opt Out' physician or practitioner emergency or urgent service
+GM,2023,Multiple patients on one ambulance trip
+GN,2023,Service delivered personally by a speech-language pathologist or under an outpatient speech-language pathology plan of care
+GO,2023,Service delivered personally by an occupational therapist or under an outpatient occupational therapy plan of care
+GP,2023,Service delivered personally by a physical therapist or under an outpatient physical therapy plan of care
+GQ,2023,Via asynchronous telecommunications system 
+GT,2023,Via interactive audio and video telecommunication systems
+GV,2023,Attending physician not employed or paid under arrangement by the patient's hospice provider
+GW,2023,Service not related to the hospice patient's terminal condition
+GY,2023,Item or service statutorily excluded or does not meet the definition of any Medicare benefit
+GZ,2023,Item or service expected to be denied as not reasonable and necessary
+KO,2023,Single drug unit dose formulation. KP - First drug of a multiple drug unit dose formulation
+KP,2023,First drug of a multiple drug unit dose formulation
+KQ,2023,Second or subsequent drug of a multiple drug unit dose formulation
+LC,2023,Left circumflex coronary artery
+LD,2023,Left anterior descending coronary artery
+LR,2023,Laboratory round trip
+LS,2023,FDA-monitored intraocular lens implant
+LT,2023,Left Side. (Used to identify procedures performed on the left side of the body.) 
+P1,2023,A normal healthy patient
+P2,2023,Mild systemic disease
+P3,2023,Severe systemic disease
+P4,2023,Severe systemic disease with constant threat to life
+P5,2023,A moribund patient who is not expected to survive without the operation
+P6,2023,A declared brain dead patient whose organs are being removed for donor purposes
+PT,2023,Colorectal screen service converted to diagnostic or therapeutic service
+Q3,2023,Live kidney donor - Services associated with postoperative medical complications directly related to the donation
+Q4,2023,Service for ordering/referring physician qualifies as a service exemption
+Q5,2023,Service furnished by a substitute physician under a reciprocal billing arrangement
+Q6,2023,Service furnished by a locum tenens physician
+Q7,2023,One Class A Finding
+Q8,2023,Two Class B findings
+Q9,2023,One Class B and Two Class C findings
+QA,2023,FDA investigational device exemption
+QB,2023,Physician providing service in a rural Health Professional Shortage Area (HPSA)
+QC,2023,Single channel monitoring
+QD,2023,Recording and storage in solid state memory by digital recorder
+QK,2023,"Medical direction of two, three, or four concurrent anesthesia procedures involving qualified individuals"
+QL,2023,Patient pronounced dead after ambulance called
+QM,2023,Ambulance service provided under arrangement by a provider of services
+QN,2023,Ambulance service furnished directly by a provider of services
+QP,2023,"Documentation is on file showing that the laboratory test(s) was ordered individually or ordered as a CPT-recognized panel other than automated profile codes 80002-80019, G0058, G0059, and G0060"
+QQ,2023,Claim submitted with a written statement of intent
+QS,2023,Monitored anesthesia care service
+QT,2023,Recording and storage on a tape by an analog tape recorder
+QU,2023,Physician providing service in an urban Health Professional Shortage Area (HPSA)
+QV,2023,Item or service provided as routine care in a Medicare qualifying clinical trial
+QW,2023,Clinical Laboratory Improvement Amendment (CLIA) waived test (modifier used to identify waived tests)
+QX,2023,CRNA service with medical direction by a physician
+QY,2023,Anesthesiologist medically directs one CRNA
+QZ,2023,CRNA service without medical direction by a physician
+RC,2023,Right coronary artery
+RT,2023,Right Side (used to identify procedures performed on the right side of the body)
+SF,2023,"Second opinion ordered by a Professional Review Organization (PRO) per Section 9401, P.L. 99-272 (100% reimbursement - no Medicare deductible or coinsurance)"
+SG,2023,Ambulatory Surgical Center (ASC) facility service
+T1,2023,"Left Foot, Second Digit"
+T2,2023,"Left Foot, Third Digit"
+T3,2023,"Left Foot, Fourth Digit"
+T4,2023,"Left Foot, Fifth Digit"
+T5,2023,"Right Foot, Great Toe"
+T6,2023,"Right Foot, Second Digit"
+T7,2023,"Right Foot, Third Digit"
+T8,2023,"Right Foot, Fourth Digit"
+T9,2023,"Right Foot, Fifth Digit"
+TA,2023,"Left Foot, Great Toe"
+TC,2023,Technical Component
+UN,2023,Two patients served
+UP,2023,Three patients served
+UQ,2023,Four patients served
+UR,2023,Five patients served
+US,2023,Six patients or more served
+VP,2023,Aphakic Patient
+XE,2023,"Separate encounter, A service that is distinct because it occurred during a separate encounter. This modifier should only be used to describe separate encounters on the same date of service."
+XS,2023,"Separate Structure, A service that is distinct because it was performed on a separate organ/strucutre."
+XP,2023,"Separate Practitioner, A service that is distinct because it was performed by a different practitioner."
+XU,2023,"Unusual Non-Overlapping Service, The use of a service that is distinct because it does not overlap usual components of the main service."

@@ -20,10 +20,21 @@ class GPTModel(Enum):
     GPT3_5 = "gpt-3.5-turbo"
 
 class SimpleAutocoder:
-    def __init__(self, specialty=Specialty.ANESTHESIA, year=2023, claimcleaner_token=""):
+    def __init__(self, specialty=Specialty.ANESTHESIA, year=2023, gptmodel=GPTModel.GPT3_5, claimcleaner_token="", quiet=True):
         openai.api_key = os.getenv("OPENAI_API_KEY")
         print(f"Using openai api_key={openai.api_key}")
+        self.gptmodel = gptmodel
+        self.quiet = quiet
+        #load csv datafiles for asa crosswalk, icds, cpts, and modifiers
         self.asacwdf = pd.read_csv("CROSSWALKs-ALL.csv", dtype={'CPT Procedure Code':str, 'CPT Anesthesia Code':str})
+        #self.asacwdf columns: CPT Procedure Code, CPT Procedure Descriptor, CPT Anesthesia Code, CPT Anesthesia Descriptor, Base Unit Value, Time, Alternates, Changed This Year, New, Alternate Changed, Comment Instruction Added or Changed, Comment	Instruction Text, CMS Base Units Differ, Year, Instructi/Text, Base Unit Value - ASA
+        self.icddf = pd.read_csv("ICDs-ALL.csv", dtype={'ICD Code':str, 'Description':str})
+        #self.icddf columns: ICD Code, Description, Year
+        self.cptdf = pd.read_csv("CPTs-ALL.csv", dtype={'CPT Code':str, 'Description':str})
+        #self.cptdf columns: CPT Code, Relative ID, Description Type, Description, Year
+        self.moddf = pd.read_csv("modifier.csv", dtype={'Modifier':str, 'Description':str})
+        #self.moddf columns: Modifier, Description
+
         self.year = year
         self.specialty = specialty
         self.CC_URL = f"https://claimcleaner.api.hank.ai/clean/1.0.1/{claimcleaner_token}"
@@ -49,8 +60,13 @@ class SimpleAutocoder:
             ]
         }
         self.pre_prompts = {
+            "anesthesia": """given this operative report, return 1 minimized json object containing 2 unlabeled tries 
+                of only your best unique predictions for surgical cpts (s), anesthesia cpts (a), icds (i), and modifiers (m). no extra words.
+                """, 
             "anesthesia": "given the following medical note, predict " + \
-                "lists of the surgical cpts (s), anesthesia cpts (a), icd codes (i), and the billing modifiers (m) and confidence (c) from 0.0 to 1.0 as json. only return the json object. use json keys s, a, i, m, c. ",
+                "lists of the best procedure cpts (s), anesthesia cpts (a), icd codes (i), and the billing modifiers (m) as json. only return the json object. use json keys s, a, i, m.",
+            "anesthesia_procedure": "given the following anesthesia procedure note, predict " + \
+                "lists of the best procedure cpts (s), icd codes (i), and the billing modifiers (m) as json. only return the json object. use json keys s, i, m.",
             # 'anesthesia': "given the following surgical operative report, return a single json object with no headers/footers, or extra spaces that contains 3 seperate prediction attempts as seperate items in the parent json list " + \
             #     "for the combination of surgical cpt, anesthesia cpt, list of icds, any applicable modifiers, and prediction confidence. use keys surgcpt, anescpt, icds, mods, conf. Please apply the ASA crosswalk rules and the NCCI edits.",
                 # "return 3 different attempts to do the predictions as a list of seperate prediction groups in the json. make sure everything is in one json object.",
@@ -92,10 +108,30 @@ class SimpleAutocoder:
         elif dropUncrosswalked:
             return ""
         return row['a']
-    
+        #lookup anesthesia base units. asa = an asa cpt code as a string
 
-    #returns a list of the cleaned up claim predictions
-    def _processLineItemSpecialty(self, openai_json, specialty:Specialty=None, dropUncrosswalkedASAs=True):
+    #returns -1 if asa code not found
+    #looks up the base units for an asa cpt code in a given year
+    def buLookup(self, asa:str, year:int=None, useASAValues:bool=0):
+        if year is None: year = self.year
+        if not self.quiet: print('Looking up {} in buLookup'.format(asa))
+        asa = str(asa).zfill(5)
+        if all(c == '0' for c in asa): return -1
+        try:
+            if useASAValues:
+                qdf = self.asacwdf[(self.asacwdf['CPT Anesthesia Code']==asa) & (self.asacwdf['Year']==year)]['Base Unit Value - ASA']
+            else:
+                qdf = self.asacwdf[(self.asacwdf['CPT Anesthesia Code']==asa) & (self.asacwdf['Year']==year)]['Base Unit Value']
+            if len(qdf)>0:
+                return int(qdf.iloc[0])
+        except Exception as e:
+            print(f"ERROR in buLookup: {e}")
+        return -1
+
+
+    #this function runs BEFORE sending line items to claim cleaner
+    #returns a list of independent attempts containining lists of the cleaned up predicted line items
+    def _processLineItemSpecialty_BEFORE_claimcleaner(self, openai_json, specialty:Specialty=None, dropUncrosswalkedASAs=True):
         if specialty is None: specialty=self.specialty
         # Create empty list to contain the prediction lists for the claim line items
         preds = []
@@ -105,9 +141,12 @@ class SimpleAutocoder:
             for s in d['s']:
                 td = d.copy() #need to make copy or doesn't update dict properly
                 td['s'] = s
+                if 'a' not in td.keys(): td['a']="" #most processing in later functions expects an anescpt key (even if empty). so put an empty one.
                 if specialty == Specialty.ANESTHESIA: 
-                    #occasionally gpt returns an asa list. pick just the first one
-                    if isinstance(td['a'], list): td['a'] = td['a'][0]
+                    #gpt may return an asa list. pick just the first one
+                    if isinstance(td['a'], list): 
+                        if len(td['a']) > 0: td['a'] = td['a'][0]
+                        else: td['a']=""
                     #check asa crosswalk. remove asa code if doesn't match to cpt code
                     td['a'] = self.checkASACW(td, year=self.year, dropUncrosswalked=1) #[x for x in d['a'] if x in validasas and not len(validasas)==0]               
                 else:
@@ -117,12 +156,38 @@ class SimpleAutocoder:
                     's': s,
                     'a': td['a'],
                     'i': td['i'],
-                    'm': td['m'],
-                    'c': td['c']
+                    'm': [re.sub(r'[^\w\s]', '', s) for s in td['m']], #remove punctuation
+                    #'c': td['c']
                 })
             preds.append(thisclaim)
         return preds
     
+    #this function runs AFTER sending line items to claim cleaner
+    #returns a list of independent attempts containining lists of the cleaned up predicted line items
+    def _processLineItemSpecialty_AFTER_claimcleaner(self, line_items, specialty:Specialty=None):
+        if specialty is None: specialty=self.specialty
+        # Create empty list to contain the prediction lists for the claim line items
+        preds = []
+        if specialty==Specialty.ANESTHESIA: #do anesthesia stuff like keeping only line item that has asa code with highest base units
+            #[{'cpt':'27447', 'anescpt':'00400'}, {'cpt':'27447', 'anescpt':'00731'}, {'cpt':'64450', 'anescpt':''}]
+            licopy = line_items.copy()
+            highest_baseunits = -1
+            highest_baseunits_lineitem = {}
+            for li in licopy:
+                if li['anescpt']!= "":
+                    baseunits = self.buLookup(li['anescpt'])
+                    print(li['anescpt'], baseunits)
+                    if baseunits > highest_baseunits:
+                        highest_baseunits = baseunits
+                        highest_baseunits_lineitem = li
+
+            line_items = [li for li in line_items if li['anescpt']=='' or (li['cpt']==highest_baseunits_lineitem['cpt'] and li['anescpt']==highest_baseunits_lineitem['anescpt'])]
+
+        if specialty==Specialty.SURGERY: #drop non surgical line items (i.e. anesthesia procedures, etc)
+            line_items = line_items
+        return line_items
+    
+
     #takes line_items as a dict list in the openai short format (keys = s, a, i, m, c) and converts them to claim cleaner keys
     #make line items for the claim cleaner api from the prompted gpt json response
     #returns: list of claim line items as expected by claim cleaner api spec
@@ -142,6 +207,8 @@ class SimpleAutocoder:
         # Remove trailing commas
         fixed = re.sub(",\s*}", "}", json_string)
         fixed = re.sub(",\s*\]", "]", fixed)
+        # Add double quotes around alphanumeric values not already enclosed in quotes
+        fixed = re.sub(r'([a-zA-Z0-9.]+)', r'"\1"', fixed)
         # find the JSON part using regex
         match = re.search(r'{.*}|\[.*\]', json_string, re.DOTALL)
         if match:
@@ -152,12 +219,17 @@ class SimpleAutocoder:
             raise MalformedOpenaiJSON(f"The JSON from openai seems to be malformed.\n{repr(json_string)}")
         return fixed
     
+    def _reducePredictions(self, openai_json):
+        #in the future should calculate some averages across the independent prediction group responses instead of just taking the first one
+        return openai_json[0] 
+
     def handleCands(self, openai_json:list, year:int=2023, specialty:Specialty=None):
         if specialty is None: specialty=self.specialty
         res = []
-        if isinstance(openai_json, dict): openai_json = [openai_json]
+        if isinstance(openai_json, dict): openai_json = [openai_json] #to be compatible with prompts that return multiple candidate responses in the json as a list
         print(openai_json)
-        openai_json = self._processLineItemSpecialty(openai_json, specialty=specialty, dropUncrosswalkedASAs=1)
+        openai_json = self._processLineItemSpecialty_BEFORE_claimcleaner(openai_json, specialty=specialty, dropUncrosswalkedASAs=1)
+        openai_json = self._reducePredictions(openai_json)
         print(openai_json)
         df = pd.DataFrame(openai_json)
         #if self.specialty=='anesthesia': df['a'] = df.apply(lambda row: self.checkASACW(row, year=year), axis=1) 
@@ -167,9 +239,14 @@ class SimpleAutocoder:
     #submits this_prompt string to gpt for predictions. 
     #depending upon specialty, will use a different openai prompt
     #gptmodel can be 3.5turbo or 4 currently
-    def query_openai(self, this_prompt:str, specialty:Specialty=None, gptmodel:GPTModel=GPTModel.GPT3_5):
+    def query_openai(self, this_prompt:str, specialty:Specialty=None, document_type:str=None):
         if specialty==None: specialty=self.specialty
-        print(f"Sending request to openai ...\nSPECIALTY={specialty.value}\nPROMPT={self.pre_prompts.get(specialty.value)}\n CONTENT={this_prompt}")
+        print(f"Sending request to openai {self.gptmodel.value} ...\nSPECIALTY={specialty.value}\nDOCUMENT_TYPE={document_type}\nPROMPT={self.pre_prompts.get(specialty.value)}\nCONTENT={this_prompt}")
+        prompt = self.pre_prompts.get(specialty.value)
+        #if we are predicting anesthesia claim and processing a anesthesia procedure note, use a different prompt
+        if specialty==Specialty.ANESTHESIA and document_type=='anesthesia_procedure':
+            prompt = self.pre_prompts.get(document_type)
+
         #response = openai.Completion.create(model="text-davinci-003", prompt="write me a short poem about a bird", temperature=0, max_tokens=7)
         #### text-davinci-003 ####
         # response = openai.Completion.create(
@@ -179,9 +256,9 @@ class SimpleAutocoder:
 
         #### gpt-3.5-turbo or gpt-4
         response = openai.ChatCompletion.create(
-            model=gptmodel.value, #"gpt-4", #"gpt-3.5-turbo",
+            model=self.gptmodel.value, #"gpt-4", #"gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": self.pre_prompts.get(specialty.value)},
+                {"role": "system", "content": prompt},
                 {"role": "user", "content": this_prompt}
             ],
             #temperature=0, max_tokens=50
@@ -199,6 +276,11 @@ class SimpleAutocoder:
             cands = {}
         return cands
     
+    #takes the response from claimcleaner and formulates it into a list containing lists of cure dicts with indexes matching line items passed to claim cleaner
+    #will contain things like +00400 for anescpt, -59, +51, etc for mods
+    #+00400 anescpt would mean to use that for the anescpt for the claim
+    #-59 mods would mean remove modifier 59 from the claim. +51 mods would mean add the 59 modifier to the claim
+    #return format: [{"surgcpt": ["+27641"], "anescpt":["-00400", "+00300"], "icds":[], "mods":[]}, {"surgcpt": [], "anescpt":[], "icds":[], "mods":[]} ...]
     def buildCureList(self, claimcleaner_response):
         li_cures = []
         for li in claimcleaner_response.get("line_items"):
@@ -222,6 +304,9 @@ class SimpleAutocoder:
     
     #takes a list of a claim's line items as line_items and a list of corresponding line_item_cures from the claim cleaner api response
     # and returns a list of line items that have been modified based upon the claim cleaner cure recommendations
+    #inputs: 
+    # list of line items from convertForCC()
+    # list of line item cures from buildCureList()
     def cureClaim(self, line_items, line_item_cures):
         for liidx, lic in enumerate(line_item_cures):
             for issue_type, cure_list in lic.items():
@@ -230,8 +315,8 @@ class SimpleAutocoder:
                     print(liidx, issue_type, cure)
                     if cure[1:].strip()=="": continue
                     if cure[0]=='+': #add a thing
-                        if isinstance(liitem, list) and cure[1:] not in liitem: #add to list
-                            liitem.append(cure[1:])
+                        if isinstance(liitem, list) and cure[1:] not in liitem: #add to front of list
+                            liitem.insert(0, cure[1:])
                         elif isinstance(liitem, str): #replace string
                             liitem = cure[1:]
                     elif cure[0]=="-": #remove a thing
@@ -243,56 +328,79 @@ class SimpleAutocoder:
                     line_items[liidx][issue_type] = liitem
         return line_items
     
-    def checkAndCureWithClaimCleaner(self, openai_json):
-        claim = SimpleAutocoder.convertForCC(openai_json)
-        print("claim:", json.dumps(claim))
-        cc_response = self.postToClaimCleaner(claim)
+    def checkAndCureWithClaimCleaner(self, openai_json, quiet=True):
+        line_items = SimpleAutocoder.convertForCC(openai_json)
+        if not quiet: print("claim:", json.dumps(line_items))
+        cc_response = self.postToClaimCleaner(line_items)
         
-        print("cc_response:",json.dumps(cc_response, indent=2))
+        if not quiet: print("cc_response:",json.dumps(cc_response, indent=2))
         cure_list = self.buildCureList(cc_response)
-        print("li_cures: ", cure_list)
-        cured_claim = self.cureClaim(claim, cure_list)
+        if not quiet: print("li_cures: ", cure_list)
+        cured_claim = self.cureClaim(line_items, cure_list)
         return cured_claim
     
     
-    def postToClaimCleaner(self, claim):    
+    def postToClaimCleaner(self, line_items):    
         #update the claimcleaner json body to hold the predicted line items
         cc_body = self.cc_body
-        cc_body['claims'][0]['line_items'] = claim
+        cc_body['claims'][0]['line_items'] = line_items
+        print("Posting to claim cleaner api ...")
         response = requests.post(self.CC_URL, json=json.dumps(cc_body))
         if response.status_code == 200:
             res = response.json()
             results = res.get('RESULTS')
             errs = res.get('ERRORS')
             md = res.get('METADATA')
+        elif response.status_code == 500: 
+            print("Request to claim cleaner api failed with status code 500. Unauthorized access. Did you pass a valid token in the contructor to SimpleAutocoder()?")
         else:
-            print("Request failed with status code", response.status_code)
+            print("Request to claim cleaner api failed with status code", response.status_code)
+            print(cc_body)
 
         # print(json.dumps(cc_body, indent=2))
         # print(json.dumps(results, indent=2))
         claimcleaner_response = results.get('claims')[0]
         return claimcleaner_response
 
-    def autocode(self, documents, specialty:Specialty=None):
+    #documents: dict of lists. dict keys should match to available prompts in this class
+    def autocode(self, documents_dictionary, specialty:Specialty=None, preds_raw_json=None):
         if specialty==None: specialty=self.specialty
-        preds = {}
-        for i, doc in enumerate(documents):
-            this_prompt = ' '.join(doc.split()) #strip all extra spaces and newlines
-            cands = self.query_openai(this_prompt, specialty=specialty)
-            res = self.handleCands(cands, specialty=specialty)
-            preds[i] = res
-        print(f"***AUTOCODE RESULTS:\n{json.dumps(preds, indent=2)}")
-        all_line_items = []
-        for i, line_items in preds.items():
-            all_line_items += line_items
+        if preds_raw_json is None: #just allows you to pass in some preds you already got from openai during testing
+            preds = []
+            for doctype, documents in documents_dictionary.items():
+                if not isinstance(documents, list): documents = [documents]
+                for i, doc in enumerate(documents):
+                    this_prompt = ' '.join(doc.split()) #strip all extra spaces and newlines
+                    cands = self.query_openai(this_prompt, specialty=specialty, document_type=doctype)
+                    res = self.handleCands(cands, specialty=specialty)
+                    res = [{**d, 'doc_type':doctype, 'doc_idx':i} for d in res] #add the document type and index to each prediction for later use
+                    preds += res
+            print(f"***AUTOCODE RESULTS:\n{json.dumps(preds, indent=2)}")
+        else:
+            preds = json.loads(preds_raw_json)
+        all_line_items = preds
+        # for i, line_items in preds:
+        #     all_line_items += line_items
+        #print(all_line_items)
         cleaned_line_items = self.checkAndCureWithClaimCleaner(all_line_items)
         print(f"***AFTER CLEANING RESULTS:\n{json.dumps(cleaned_line_items, indent=2)}")
-        return preds
+        filtered_line_items = self._processLineItemSpecialty_AFTER_claimcleaner(cleaned_line_items, specialty=specialty)
+        print(f"***AFTER FILTERING FOR SPECIALTY RESULTS:\n{json.dumps(cleaned_line_items, indent=2)}")
+        return filtered_line_items
 
-docs = [SampleDocuments.anesthesia[0]] #, SampleDocuments.anesthesia_nerveblock[0]]
-ac = SimpleAutocoder()
-res = ac.autocode(docs, specialty=Specialty.ANESTHESIA)
+docs_dict = { 'anesthesia':SampleDocuments.anesthesia[0], 
+             'anesthesia_procedure':SampleDocuments.anesthesia_procedure[6]
+}
+ac = SimpleAutocoder(gptmodel=GPTModel.GPT4, claimcleaner_token="hankcc2023")
 
+#keep an openai json response in the preds variable and can pass it to the autocode funciton directly if you want to test things that happen after openai without sending it to openai again
+# pass the preds variable in to the preds_raw_json var in the autocode function to use it
+preds = SampleGPTResponses.sample_gpt_response_list[0]
+#res = ac.autocode(docs, specialty=Specialty.ANESTHESIA, preds_raw_json=preds)
+res = ac.autocode(docs_dict, specialty=Specialty.ANESTHESIA)
+
+
+print("FINAL RESULTS:")
 print(json.dumps(res, indent=2))
 
 sys.exit()
