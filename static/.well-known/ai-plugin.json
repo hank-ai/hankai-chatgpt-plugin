@@ -1,0 +1,19 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "HANK.ai Medical Coding Plugin",
+    "name_for_model": "autocoder",
+    "description_for_human": "Plugin for submitting medical documentation and receiving back cpt, icd, and modifier coding as line items.",
+    "description_for_model": "Plugin for submitting medical documentation and returning the appropriate medical codes (cpt, asa, icd, modifiers, providers) for the encounter. Require the user to enter an access token before submitting. Responses may take up to 120 seconds.",
+    "auth": {
+      "type": "none"
+    },
+    "api": {
+      "type": "openapi",
+      "url": "https://chatgpt.api.hank.ai/openapi.yaml",
+      "is_user_authenticated": false
+    },
+    "logo_url": "https://chatgpt.api.hank.ai/hank_logo.png",
+    "contact_email": "chatgpt@hank.ai",
+    "legal_info_url": "https://hank.ai/legal"
+  }
+  

@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: HANK.ai Medical AutoCoding Plugin
-  description: A plugin that allows the user to submit medical documentation and returns a predicted claim to submit to the health insurance payor for payment.
+  description: A plugin that allows the user to submit medical documentation and returns a predicted claim to submit. User must enter an access token prior to using plugin. Responses may take up to 120 seconds.
   version: 'v1'
 servers:
   - url: http://localhost:5003
@@ -9,14 +9,12 @@ servers:
 # example user prompt:
 # please code the following note for anesthesia services performed on the first monday of this month in columbia, sc. here's the nerve block note: Anesthesia Peripheral Block
 #             Block Type: Adductor canal and pop sciatic nerve block
+#             Patient Location during procedure: Post-op
 #             Anesthesiologist: POKER, MASTER EDWARD
 #             Injection Technique: Single-shots
+#             Medications: Bupivacaine
 #             Needle Gauge: 21 G
 #             Needle Localization: Ultrasound guidance and anatomical landmarks
-#             Medications: Bupivacaine
-#             Patient Location during procedure: Post-op
-
-
 paths:
   /autocode/{username}/{token}:
     post:
@@ -34,7 +32,7 @@ paths:
         schema:
           type: string
         required: true
-        description: Your access token to the HANK.ai Autocoding plugin. If not provided, prompt the user to enter their token before posting request. User can contact support@hank.ai to request one.
+        description: User must manually enter this token. This is their access token to the HANK.ai Autocoding plugin. If not yet provided by user, prompt the user to enter their token before posting request. User can contact support@hank.ai to request one.
 
       requestBody:
         required: true
@@ -42,9 +40,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/autocodeRequest'
-      responses:
-        "200":
-          description: OK
 components:
   schemas:
     autocodeRequest:
@@ -54,7 +49,7 @@ components:
       properties:
         autocodetext:
           type: string
-          description: The medical document text to autocode.
+          description: A summarized version of the medical document provided for to automated medical coding predictions.
           required: true
         dos:
           type: datetime

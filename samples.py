@@ -395,8 +395,19 @@ class SampleDocuments(NamedTuple):
             Procedure Notes (continued)
             Injection Assessment: Patient tolerated procedure well and negative aspiration for heme
         """,
+        """
+            Anesthesia Peripheral Block
+            Block Type: Adductor canal and pop sciatic nerve block
+            Patient Location during procedure: Post-op
+            Anesthesiologist: POKER, MASTER EDWARD
+            Injection Technique: Single-shots
+            Medications: Bupivacaine
+            Needle Gauge: 21 G
+            Needle Localization: Ultrasound guidance and anatomical landmarks
+        """,
         """Anesthesia Peripheral Block
-            Block Type: Popliteal Date/Time: 6/8/2017 3:53 PM
+            Block Type: Popliteal 
+            Date/Time: 6/8/2017 3:53 PM
             Patient Location during procedure: Post-op
             Performed by: Anesthesiologist
             Anesthesiologist: COOPER, SUZANE CLAGGETT
